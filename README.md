@@ -1,1 +1,1 @@
-# python database connector example code:
+python database connector example code:

@@ -9,9 +9,9 @@ from mysql.connector import errorcode
 try:
     connect = mysql.connector.connect(
 	user = 'root',
-        password = 'devops18',
+        password = 'mysql lösenord',
         host = 'localhost',
-	database = 'jesper')
+	database = 'databas namn')
     print(2*'\n', "Det Funkar!! Du har lyckats att koppla Dig till Din databas!", 2*'\n')
 
 except mysql.connector.Error as e:
@@ -34,9 +34,9 @@ from mysql.connector import Error
 from mysql.connector import errorcode
 try:
     connection = mysql.connector.connect(host = 'localhost',
-                                         database = 'jesper',
+                                         database = 'databas namn',
                                          user = 'root',
-                                         password = 'devops18')
+                                         password = 'mysql löseord')
 
     sql_insert_query = ''' INSERT INTO person                                                                                                                                                               
                               (name) VALUES ('Kalle Karlsson') '''

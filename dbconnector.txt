@@ -3,7 +3,7 @@
 import socket
 
 host = '127.0.0.1'             # Standard loopback interface adress(localhost)
-port = 50000                   # Port att lyssna på(använd gärna en port > 1023)
+port =  50000                  # Port att lyssna på(använd gärna en port > 1023)
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((host, port))
@@ -24,7 +24,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 import socket
 
 host = '127.0.0.1'               # Servern hostnamn or IP adress
-port = 50000                     # Port som används av servern
+port =  50000                    # Port som används av servern
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
  
@@ -73,7 +73,7 @@ from mysql.connector import errorcode
 try:
     connection = mysql.connector.connect(host = 'localhost',
                                          database = 'eget_databas_namn',
-                                         user = 'root',
+                                         user     = 'root',
                                          password = 'lösenord_till_mysql')
 
     sql_insert_query = ''' INSERT INTO person                                                                                                                                                               

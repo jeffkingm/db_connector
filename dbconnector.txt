@@ -72,9 +72,9 @@ from mysql.connector import Error
 from mysql.connector import errorcode
 try:
     connection = mysql.connector.connect(host = 'localhost',
-                                         database = 'databas namn',
+                                         database = 'eget_databas_namn',
                                          user = 'root',
-                                         password = 'mysql löseord')
+                                         password = 'lösenord_till_mysql')
 
     sql_insert_query = ''' INSERT INTO person                                                                                                                                                               
                               (name) VALUES ('Kalle Karlsson') '''

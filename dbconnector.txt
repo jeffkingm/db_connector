@@ -86,10 +86,10 @@ try:
     print ("Namn lagrats i person tabellen")
 
 except mysql.connector.Error as error :
-    connection.rollback() #rollback if any exception occured                                                                                                                                                
+    connection.rollback()           # rollback if any exception occured                                                                                                                                                
     print("Lagring misslyckades {}".format(error))
 finally:
-        #closing database connection.                                                                                                                                                                       
+                                    # closing database connection.                                                                                                                                                                       
     if(connection.is_connected()):
         cursor.close()
         connection.close()

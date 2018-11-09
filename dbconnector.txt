@@ -1,3 +1,121 @@
+# multiservernew.py
+import socket
+import threading
+
+# Define an IPv4 & TCP socket                                                                                                                                                                                
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+serverRunning = True
+
+ip = str(socket.gethostbyname(socket.gethostname()))
+
+port = 1234
+
+# Define an IPv4 & TCP socket                                                                                                                                                                                
+clients = {}
+
+s.bind((ip,port))
+s.listen()
+
+print('Server is ready...')
+print('Ip adressen till servern är::%s'%ip)
+
+def handleClient(client,uname):
+    clientConnected = True
+    keys = clients.keys()
+    help = 'There are four commands you can use with this server\n1:: **chatlist => gives you the list of the people currently online\n2:: **quit => To end your session\n3:: **broadcast => To broadcast yo\
+ur message to each and every person currently present online\n4:: Add the name of the person at the end of your message preceded by ** to send the message to that  particular person'
+
+ while clientConnected:
+        try:
+            # msg = client.recv(1024).decode('ascii')                                                                                                                                                        
+            # msg = client.recv(1024).decode('utf8')                                                                                                                                                         
+            msg = client.recv(1024).decode()
+            response = 'Total number of people connected to the server\n'
+            found = False
+            if('**chatlist' in msg):
+                clientNo = 0
+                for(name) in keys:
+                    clientNo += 1
+                    response = response + str(clientNo) +'::' + name+'\n'
+                client.send(response.encode())
+            elif('**help' in msg):
+                client.send(help.encode())
+            elif('**broadcast' in msg):
+                msg = msg.replace('**broadcast','')
+                for(k,v) in clients.items():
+                    v.send(msg.encode())
+            elif('**quit' in msg):
+                response = 'Server process is terminating now...'
+                client.send(response.encode())
+                clients.pop(uname)
+                print(uname + ' har frånkopplats[loggats ut] från servern!')
+                clientConnected = False
+            else:
+                for(name) in keys:
+                    if('**'+name) in msg:
+                        msg = msg.replace('**'+name, '')
+                        clients.get(name).send(msg.encode())
+                        found = True
+                if(not found):
+                    client.send('You are trying to send a message to someone not logged into the server.'.encode())
+        except:
+            clients.pop(uname)
+            print(uname + ' har frånkopplat[loggat ut] från servern!')
+            clientConnected = False
+
+while serverRunning:
+    client, address = s.accept()
+    uname = client.recv(1024).decode()
+    print('%s Connected to the server'%str(uname))
+    client.send("Welcome!. Write **help to read about all the available commands you can use".encode())
+
+    if(client not in clients):
+        clients[uname] = client
+        threading.Thread(target = handleClient, args = (client, uname, )).start()
+
+----------------------------------------------------
+
+# multiclientnew.py
+
+import socket
+import threading
+import sys
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # IPv4 & TCP                                                                                                                                           
+port = 1234
+
+uname = input("Enter the user name:: ")
+
+ip = input('Enter the IP address to the server:: ')
+
+s.connect((ip,port))
+s.send(uname.encode())
+
+clientRunning = True
+
+def receiveMsg(sock):
+    serverDown = False
+    while clientRunning and (not serverDown):
+        try:
+            msg = sock.recv(1024).decode()
+            print(msg)
+        except:
+            print('Server is Down. You are now Disconnected. Press enter to exit...')
+            serverDown = True
+
+threading.Thread(target = receiveMsg, args = (s,)).start()
+while clientRunning:
+    tempMsg = input()
+    msg = uname + '>>' + tempMsg
+    if '**quit' in msg:
+        clientRunning = False
+        s.send('**quit'.encode())
+    else:
+        s.send(msg.encode())
+
+---------------------------------------------------------
+
 #  multiconnection-server.py
 
 import selectors
